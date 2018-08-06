@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: btc-predictor-batch-job102
+spec:
+    template:
+        metadata:
+            name: btc-predictor-batch-job-tpl
+        spec:
+            volumes:
+            - 
+                name: google-cloud-key
+                secret:
+                    secretName: btc-prediction-key
+            containers:
+                -
+                    name: btc-predictor-container-01
+                    image: gcr.io/koduki-docker-test-001-1083/predictor
+                    volumeMounts:
+                    - 
+                        name: google-cloud-key
+                        mountPath: /var/secrets/google
+                    env:
+                    - 
+                        name: GOOGLE_APPLICATION_CREDENTIALS
+                        value: /var/secrets/google/key.json
+            restartPolicy: Never
+    backoffLimit: 4

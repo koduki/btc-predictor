@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: btc-collector-batch-job5
+spec:
+    template:
+        metadata:
+            name: btc-collector-batch-job-tpl
+        spec:
+            containers:
+                -
+                    name: btc-collector-container-01
+                    image: gcr.io/koduki-docker-test-001-1083/collector
+            restartPolicy: Never
+    backoffLimit: 4
