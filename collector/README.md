@@ -27,7 +27,7 @@ kubectl log jobs/btc-collector-batch-job2
 
 ```bash
 kubectl delete cronjob bmcollector
-kubectl run "bmcollector" --schedule="*/1 * * * *" --restart=OnFailure --image="gcr.io/koduki-docker-test-001-1083/collector
+kubectl run "btcollector" --schedule="50 23 * * * " --restart=OnFailure --image="gcr.io/koduki-docker-test-001-1083/collector"
 
 kubectl get cronjob 
 kubectl get jobs

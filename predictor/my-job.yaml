@@ -1,28 +1,30 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: batch/v1beta1
+kind: CronJob
 metadata:
-    name: btc-predictor-batch-job102
+    name: btcpredictor
 spec:
-    template:
-        metadata:
-            name: btc-predictor-batch-job-tpl
+    concurrencyPolicy: Replace
+    schedule: "55 23 * * * "
+    jobTemplate:
         spec:
-            volumes:
-            - 
-                name: google-cloud-key
-                secret:
-                    secretName: btc-prediction-key
-            containers:
-                -
-                    name: btc-predictor-container-01
-                    image: gcr.io/koduki-docker-test-001-1083/predictor
-                    volumeMounts:
+            template:
+                spec:
+                    volumes:
                     - 
                         name: google-cloud-key
-                        mountPath: /var/secrets/google
-                    env:
-                    - 
-                        name: GOOGLE_APPLICATION_CREDENTIALS
-                        value: /var/secrets/google/key.json
-            restartPolicy: Never
-    backoffLimit: 4
+                        secret:
+                            secretName: btc-prediction-key
+                    containers:
+                        -
+                            name: btc-predictor-container-01
+                            image: gcr.io/koduki-docker-test-001-1083/predictor
+                            volumeMounts:
+                            - 
+                                name: google-cloud-key
+                                mountPath: /var/secrets/google
+                            env:
+                            - 
+                                name: GOOGLE_APPLICATION_CREDENTIALS
+                                value: /var/secrets/google/key.json
+                    restartPolicy: Never
+            backoffLimit: 4
