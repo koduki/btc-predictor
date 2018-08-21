@@ -17,7 +17,10 @@ exports.helloGET = (req, res) => {
         if (data) {
             console.log("get file "+file.name);
             console.log(data);
-            res.send(data);
+            res.set('Access-Control-Allow-Origin', "*")
+            res.set('Access-Control-Allow-Methods', 'GET, POST')
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(data);
         }
       })  
 }
