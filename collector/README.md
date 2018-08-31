@@ -1,43 +1,40 @@
+README
+===========
+
+This is a predictor batch container for btc-predictor.
+This batch is base on k8s(GKE).
+
+Init Project
+-----------
+
 ```bash
-docker build -t koduki/ml-bitcoin/collector .
+gcloud config set project koduki-docker-test-001-1083
+export PRJ_NAME=koduki-docker-test-001-1083
 ```
 
+Build
+-----------
+
+Container tag name is required `gcr.io/{project name}/{container name}` format due to using Google Container Registry.
+
 ```bash
-docker run -ti --name gcloud-config google/cloud-sdk gcloud auth login
-docker run --rm -ti --volumes-from gcloud-config google/cloud-sdk gcloud compute instances list --project koduki-docker-test-001-1083
+docker build -t gcr.io/${PRJ_NAME}/predictor .
+gcloud docker -- push gcr.io/${PRJ_NAME}/predictor
 ```
 
+Add Job
+--------------
+
 ```bash
-docker run --rm -ti --volumes-from gcloud-config koduki/ml-bitcoin/collector
+kubectl delete cronjob btcollector
+kubectl run "btcollector" --schedule="50 23 * * * " --restart=OnFailure --image="gcr.io/${PRJ_NAME}/predictor"
 ```
 
-```bash
-gcloud container clusters get-credentials cluster-3 
-
-docker build -t gcr.io/koduki-docker-test-001-1083/collector .
-gcloud docker -- push gcr.io/koduki-docker-test-001-1083/collector
-
-
-kubectl run "bmcollector14" --restart=OnFailure --image="gcr.io/koduki-docker-test-001-1083/collector"
-kubectl create -f my-job.yaml
-kubectl get job
-kubectl describe jobs/btc-collector-batch-job2
-kubectl log jobs/btc-collector-batch-job2
-```
+Monitoring
+---------------
 
 ```bash
-kubectl delete cronjob bmcollector
-kubectl run "btcollector" --schedule="50 23 * * * " --restart=OnFailure --image="gcr.io/koduki-docker-test-001-1083/collector"
-
-kubectl get cronjob 
 kubectl get jobs
-kubectl get jobs --watch
-kubectl log jobs/bmcollector-1532557140
-```
-
-memo
-
-```
-AccessDeniedException: 403 Insufficient OAuth2 scope to perform this operation. 
-https://stackoverflow.com/questions/46497002/gcs-write-access-from-inside-a-gke-pod?noredirect=1&lq=1
+kubectl describe jobs/btcollector
+kubectl log jobs/btcollector
 ```

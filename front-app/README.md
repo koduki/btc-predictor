@@ -1,8 +1,19 @@
-# front-app
+README
+===========
 
-> A Vue.js project
+This is a front-end functions for btc-predictor.
+This batch is base on firebase.
 
-## Build Setup
+Deploy
+------------
+
+```bash
+firebase login
+firebase deploy
+```
+
+Build Setup
+-------------
 
 ``` bash
 # install dependencies
