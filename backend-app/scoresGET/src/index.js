@@ -11,14 +11,16 @@ const filterByDay = (json, start) => {
   for(let i=0;i<allDays.length;i++){ 
     if(allDays[i] >= '2018-08-01'){
       days.push(allDays[i])
-      actual.push(allActual[i])
+      if(allActual[i] != 0){
+        actual.push(allActual[i])
+      }
       prediction.push(allPrediction[i])
     }
   }
   return {days:days, actual:actual, prediction:prediction}
 }
 
-exports.helloGET = (req, res) => {
+exports.scoresGET = (req, res) => {
   const storage = new Storage();
 
   const file = storage
@@ -37,7 +39,7 @@ exports.helloGET = (req, res) => {
             res.set('Access-Control-Allow-Methods', 'GET, POST')
             res.writeHead(200, { 'Content-Type': 'application/json' })
 
-            const r = JSON.stringify(filterByDay(JSON.parse(data), '2018-07-01'));
+            const r = JSON.stringify({'KNeighbors': [3, 4, 1]});
             res.end(r);
         }
       })  

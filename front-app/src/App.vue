@@ -1,21 +1,21 @@
 <template>
   <div>
     <h2>明日のビットコインはいくら？</h2>
-    <MyChart :chartData="chartData" :width="900" :height="300"/>
-    <table>
+    <MyChart :chartData="chartData" :width="800" :height="300" />
+    <table class="table table-striped">
       <body>
         <tr>
-          <th>アルゴリズム</th>
-          <th>70%</th>
-          <th>80%</th>
-          <th>90%</th>
-          <th>説明</th>
+          <th scope="col">アルゴリズム</th>
+          <th scope="col">70%</th>
+          <th scope="col">80%</th>
+          <th scope="col">90%</th>
+          <th scope="col">説明</th>
         </tr>
         <tr>
-          <td>KNeighbors</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td scope="row">KNeighbors</td>
+          <td>{{score['KNeighbors'][0]}}</td>
+          <td>{{score['KNeighbors'][1]}}</td>
+          <td>{{score['KNeighbors'][2]}}</td>
           <td>K近傍法。各値の距離から予想をするアルゴリズム</td>
         </tr>
       </body>
@@ -24,21 +24,22 @@
 </template>
 
 <script>
+
 // インポート
 import MyChart from './components/MyChart'
-
 export default {
-  name: 'Test',
+  name: 'BTC-Prediction',
   components: {
     MyChart
   },
   data () {
     return {
-      chartData: {}
+      chartData: {},
+      score: {'KNeighbors': [0, 0, 0]}
     }
   },
   methods: {
-    fillData () {
+    getPredictions () {
       const json = fetch('https://us-central1-koduki-docker-test-001-1083.cloudfunctions.net/helloGET')
       Promise.resolve(json).then(result => {
         return result.json()
@@ -47,7 +48,7 @@ export default {
           labels: response.days,
           datasets: [
             {
-              label: '実測値(BTC/円)',
+              label: '実測値(BTC/USD)',
               borderColor: 'rgba(254,97,132,0.8)',
               backgroundColor: '#11ffee00',
               data: response.actual
@@ -62,10 +63,21 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    getScores () {
+      const json = fetch('https://us-central1-koduki-docker-test-001-1083.cloudfunctions.net/scoresGET')
+      Promise.resolve(json).then(result => {
+        return result.json()
+      }).then(response => {
+        this.score = response
+      }).catch(error => {
+        console.log(error)
+      })
     }
   },
   created () {
-    this.fillData() // インスタンス作成時にfillDataを実行
+    this.getPredictions()
+    this.getScores()
   }
 }
 </script>

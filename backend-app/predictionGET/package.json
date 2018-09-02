@@ -1,0 +1,22 @@
+{
+  "name": "btc-predictor-predictionGET",
+  "version": "0.0.1",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "koduki",
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "samples lint",
+    "pretest": "npm run lint",
+    "test": "ava -T 20s --verbose test/*.test.js",
+    "deploy": "gcloud beta functions deploy predictionGET --runtime nodejs8 --trigger-http --stage-bucket btcp-cloud-functions-001"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "1.7.0",
+    "nmp": "^1.0.3"
+  },
+  "devDependencies": {}
+}

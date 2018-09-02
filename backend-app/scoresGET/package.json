@@ -1,5 +1,5 @@
 {
-  "name": "btc-predictor-backend",
+  "name": "btc-predictor-scores",
   "version": "0.0.1",
   "private": true,
   "license": "Apache-2.0",
@@ -12,17 +12,11 @@
     "lint": "samples lint",
     "pretest": "npm run lint",
     "test": "ava -T 20s --verbose test/*.test.js",
-    "clean": "rm -fr ./dist/",
-    "deploy": "gcloud beta functions deploy helloGET --runtime nodejs8 --trigger-http --stage-bucket btcp-cloud-functions-001"
+    "deploy": "gcloud beta functions deploy scoresGET --runtime nodejs8 --trigger-http --stage-bucket btcp-cloud-functions-002"
   },
   "dependencies": {
     "@google-cloud/storage": "1.7.0",
     "nmp": "^1.0.3"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-env": "^7.0.0"
-  }
+  "devDependencies": {}
 }
