@@ -1,10 +1,10 @@
 <script>
-import { Bar, mixins } from 'vue-chartjs' // mixinsモジュールをインポート
+import { Line, mixins } from 'vue-chartjs'
 export default {
-  extends: Bar,
-  mixins: [mixins.reactiveProp], // reactivePropを使用
+  extends: Line,
+  mixins: [mixins.reactiveProp],
   props: {
-    chartData: Object // 親コンポーネントからchartDataを受け取る
+    chartData: Object
   },
   mounted () {
     this.renderChart(this.chartData)
