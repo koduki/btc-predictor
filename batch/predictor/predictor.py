@@ -29,7 +29,10 @@ model.fit(train_x, train_y)
 print("Score : %f" % model.score(test_x, test_y))
 
 # prediction
-days = np.append(x, np.array([[20180902]]), axis=0)
+today = datetime.datetime.strptime(str(x[-1][0]), "%Y%m%d")
+tomorrow = int((today + datetime.timedelta(days=1)).strftime("%Y%m%d"))
+
+days = np.append(x, np.array([[tomorrow]]), axis=0)
 predict_y = model.predict(days)
 actual_y = np.append(y, np.array([0]), axis=0)
 

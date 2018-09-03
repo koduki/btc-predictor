@@ -6,9 +6,10 @@
       <body>
         <tr>
           <th scope="col">アルゴリズム</th>
-          <th scope="col">70%</th>
-          <th scope="col">80%</th>
-          <th scope="col">90%</th>
+          <th scope="col">95%</th>
+          <th scope="col">98%</th>
+          <th scope="col">99%</th>
+          <th scope="col">最新予想</th>
           <th scope="col">説明</th>
         </tr>
         <tr>
@@ -16,6 +17,7 @@
           <td>{{score['KNeighbors'][0]}}</td>
           <td>{{score['KNeighbors'][1]}}</td>
           <td>{{score['KNeighbors'][2]}}</td>
+          <td>${{Math.round(score['KNeighbors'][3])}}</td>
           <td>K近傍法。各値の距離から予想をするアルゴリズム</td>
         </tr>
       </body>
@@ -35,7 +37,7 @@ export default {
   data () {
     return {
       chartData: {},
-      score: {'KNeighbors': [0, 0, 0]}
+      score: {'KNeighbors': [0, 0, 0, 0]}
     }
   },
   methods: {
