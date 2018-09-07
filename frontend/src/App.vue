@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     getPredictions () {
-      const json = fetch('https://us-central1-koduki-docker-test-001-1083.cloudfunctions.net/helloGET')
+      const json = fetch('https://us-central1-koduki-docker-test-001-1083.cloudfunctions.net/predictionGET')
       Promise.resolve(json).then(result => {
         return result.json()
       }).then(response => {
