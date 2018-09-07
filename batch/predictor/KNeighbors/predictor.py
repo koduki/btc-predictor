@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 
 import json
+import datetime
 from google.cloud import storage as gcs
 
 # configuration
