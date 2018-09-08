@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
 
 import json
 import datetime
@@ -10,7 +10,7 @@ from google.cloud import storage as gcs
 project_name = 'koduki-docker-test-001-1083'
 bucket_name = 'cn_orz_pascal-bitcoin_prediction'
 input = 'btc_history.json'
-output = 'btc_prediction_knn.json'
+output = 'btc_prediction_dtree.json'
 
 # read data
 client = gcs.Client(project_name)
@@ -25,7 +25,9 @@ y = np.array([k for k in btc_price['bpi'].values()])
 
 # training
 train_x, test_x, train_y, test_y = train_test_split(x, y)
-model = KNeighborsRegressor(n_neighbors=3)
+#model = SVR(kernel='rbf', C=0.0001)
+model = DecisionTreeRegressor(max_depth=10)
+
 model.fit(train_x, train_y)
 print("Score : %f" % model.score(test_x, test_y))
 

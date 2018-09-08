@@ -1,46 +1,63 @@
 const Storage = require('@google-cloud/storage');
 
-const filterByDay = (json, start) => {
-  const allDays = json['days']
-  const allActual = json['actual']
-  const allPrediction = json['prediction']
+const filterByDay = (jsons, start) => {
+  const allDays = jsons[0]['days']
+  const allActual = jsons[0]['actual']
+  const allPrediction = {}
+  allPrediction['knn'] = jsons[0]['prediction']
+  allPrediction['dtree'] = jsons[1]['prediction']
 
   const days = []
   const actual = []
-  const prediction = []
-  for(let i=0;i<allDays.length;i++){ 
-    if(allDays[i] >= '2018-08-01'){
+  const knn = []
+  const dtree = []
+  for(let i=0; i<allDays.length; i++){ 
+    if(allDays[i] >= start){
       days.push(allDays[i])
       if(allActual[i] != 0){
         actual.push(allActual[i])
       }
-      prediction.push(allPrediction[i])
+      knn.push(allPrediction['knn'][i])
+      dtree.push(allPrediction['dtree'][i])
     }
   }
-  return {days:days, actual:actual, prediction:prediction}
+  return {version:'3', days:days, actual:actual, prediction:{'knn':knn, 'dtree':dtree}}
 }
 
 exports.predictionGET = (req, res) => {
   const storage = new Storage();
 
-  const file = storage
+  const predictionKnn = storage
                 .bucket('cn_orz_pascal-bitcoin_prediction')
-                .file('btc_prediction.json');
+                .file('btc_prediction_knn.json');
 
-  file.download()
-      .then(function(data){
-        if (data) return data.toString('utf-8');
-      })
-      .then(function(data){
-        if (data) {
-            console.log(data);
+  const predictionDtree= storage
+                .bucket('cn_orz_pascal-bitcoin_prediction')
+                .file('btc_prediction_dtree.json');
 
-            res.set('Access-Control-Allow-Origin', "*")
-            res.set('Access-Control-Allow-Methods', 'GET, POST')
-            res.writeHead(200, { 'Content-Type': 'application/json' })
+  const knn = predictionKnn.download()
+                            .then(function(data){
+                              if (data) return data.toString('utf-8');
+                            }).then(function(data){
+                              return JSON.parse(data)
+                            })
+  const dtree = predictionDtree.download()
+                            .then(function(data){
+                              if (data) return data.toString('utf-8');
+                            }).then(function(data){
+                              return JSON.parse(data)
+                            })
+  
+  Promise.all([knn, dtree]).then(function(values) {
+    console.log('kdebug:' + values.length)
+    if (values) {
 
-            const r = JSON.stringify(filterByDay(JSON.parse(data), '2018-07-01'));
-            res.end(r);
-        }
-      })  
+      res.set('Access-Control-Allow-Origin', "*")
+      res.set('Access-Control-Allow-Methods', 'GET, POST')
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+
+      const rc = JSON.stringify(filterByDay(values, '2018-08-10'));
+      res.end(rc);
+    }
+  })
 }

@@ -14,11 +14,19 @@
         </tr>
         <tr>
           <td scope="row">KNeighbors</td>
-          <td>{{score['KNeighbors'][0]}}</td>
-          <td>{{score['KNeighbors'][1]}}</td>
-          <td>{{score['KNeighbors'][2]}}</td>
-          <td>${{Math.round(score['KNeighbors'][3])}}</td>
+          <td>{{score['knn'][0]}}</td>
+          <td>{{score['knn'][1]}}</td>
+          <td>{{score['knn'][2]}}</td>
+          <td>${{Math.round(score['knn'][3])}}</td>
           <td>K近傍法。各値の距離から予想をするアルゴリズム</td>
+        </tr>
+        <tr>
+          <td scope="row">DecisionTree</td>
+          <td>{{score['dtree'][0]}}</td>
+          <td>{{score['dtree'][1]}}</td>
+          <td>{{score['dtree'][2]}}</td>
+          <td>${{Math.round(score['dtree'][3])}}</td>
+          <td>決定木。条件分岐を重ねていき最も近い値を選択するアルゴリズム</td>
         </tr>
       </body>
     </table>
@@ -58,7 +66,12 @@ export default {
               label: 'KNeighbors',
               borderColor: 'rgba(54,164,235,0.8)',
               backgroundColor: '#11ffee00',
-              data: response.prediction
+              data: response.prediction['knn']
+            }, {
+              label: 'DecisionTree',
+              borderColor: '#00F9A9',
+              backgroundColor: '#11ffee00',
+              data: response.prediction['dtree']
             }
           ]
         }
