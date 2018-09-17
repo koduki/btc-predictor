@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: wf-exec-ml-
+spec:
+  entrypoint: exec-ml
+  volumes:
+  - name: google-cloud-key
+    secret:
+      secretName: btc-prediction-key
+  templates:
+  - name: btc-collector
+    container:
+      image: gcr.io/koduki-docker-test-001-1083/collector
+  - name: btc-predictor-dtree
+    container:
+      image: gcr.io/koduki-docker-test-001-1083/predictor_dtree
+      volumeMounts:
+      - name: google-cloud-key
+        mountPath: /var/secrets/google
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/secrets/google/key.json
+  - name: btc-predictor-knn
+    container:
+      image: gcr.io/koduki-docker-test-001-1083/predictor_knn
+      volumeMounts:
+      - name: google-cloud-key
+        mountPath: /var/secrets/google
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/secrets/google/key.json
+  - name: btc-scoring
+    container:
+      image: gcr.io/koduki-docker-test-001-1083/scoring
+      volumeMounts:
+      - name: google-cloud-key
+        mountPath: /var/secrets/google
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/secrets/google/key.json
+  - name: exec-ml
+    dag:
+      tasks:
+      - name: step-btc-collector
+        template: btc-collector
+      - name: step-btc-predictor-dtree
+        dependencies: [step-btc-collector]
+        template: btc-predictor-dtree
+      - name: step-btc-predictor-knn
+        dependencies: [step-btc-collector]
+        template: btc-predictor-knn
+      - name: step-btc-scoring
+        dependencies: [step-btc-predictor-dtree, step-btc-predictor-knn]
+        template: btc-scoring

@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: trigger-wf-exec-ml  
+spec:
+  schedule: "37 * * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: exec-workflow
+              image: gcr.io/koduki-docker-test-001-1083/wf-ml-exec
+              command: ["sh", "-c"]
+              args: ["argo submit /workflows/wf-ml-exec.yaml"]
