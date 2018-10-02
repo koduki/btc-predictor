@@ -6,13 +6,17 @@ steps:
   - id: "tst"
     name: "debian"
     args: ["/bin/ls", "-l"]
+    dir: "frontend"
   - id: "Fetch dependency"
     name: "gcr.io/cloud-builders/npm"
     args: ["install"]
+    dir: "frontend"
   - id: "Generate html"
     name: "gcr.io/cloud-builders/npm"
     args: ["run", "build"]
+    dir: "frontend"
   - id: "Deploy to Firebase Hosting"
     name: "gcr.io/$PROJECT_ID/firebase"
     args: ["deploy"]
+    dir: "frontend"
     secretEnv: ["FIREBASE_TOKEN"]
