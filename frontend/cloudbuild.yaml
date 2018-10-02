@@ -1,0 +1,15 @@
+secrets:
+  - kmsKeyName: projects/koduki-docker-test-001-1083/locations/global/keyRings/btc_predict-keyring/cryptoKeys/btc-key
+    secretEnv:
+      FIREBASE_TOKEN: CiQAkaZfhwjHA9C/bgXjmlIxtAlvqfEtKv7gvxir0NkYzaWIJacSVgAp4RC1jjua9stEB82VKYzemYrcDGkhUwcGpcsljR1EVeSMJcU5+dDY9Y9XQxZQO8uPOjiDjSBzrkYMKgtTRgD1YVeLDkHk2o5Jr2uWdtwPUYiGgM2v
+steps:
+  - id: "Fetch dependency"
+    name: "gcr.io/cloud-builders/npm"
+    args: ["install"]
+  - id: "Generate html"
+    name: "gcr.io/cloud-builders/npm"
+    args: ["run", "build"]
+  - id: "Deploy to Firebase Hosting"
+    name: "gcr.io/$PROJECT_ID/firebase"
+    args: ["deploy"]
+    secretEnv: ["FIREBASE_TOKEN"]
