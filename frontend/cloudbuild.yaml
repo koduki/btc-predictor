@@ -3,6 +3,9 @@ secrets:
     secretEnv:
       FIREBASE_TOKEN: CiQAkaZfhwjHA9C/bgXjmlIxtAlvqfEtKv7gvxir0NkYzaWIJacSVgAp4RC1jjua9stEB82VKYzemYrcDGkhUwcGpcsljR1EVeSMJcU5+dDY9Y9XQxZQO8uPOjiDjSBzrkYMKgtTRgD1YVeLDkHk2o5Jr2uWdtwPUYiGgM2v
 steps:
+  - id: "tst"
+    name: "debian"
+    args: ["/bin/ls", "-l"]
   - id: "Fetch dependency"
     name: "gcr.io/cloud-builders/npm"
     args: ["install"]
