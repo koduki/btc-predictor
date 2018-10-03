@@ -1,0 +1,22 @@
+substitutions:
+  _WK_DIR: backend/predictionGET
+steps:
+  - id: "Fetch dependency"
+    name: "gcr.io/cloud-builders/npm"
+    args: ["install"]
+    dir: "${_WK_DIR}"
+  - id: "Deploy to Cloud functions"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "beta",
+        "functions",
+        "deploy",
+        "predictionGET",
+        "--stage-bucket",
+        "btcp-cloud-functions-001",
+        "--trigger-http",
+        "--runtime",
+        "nodejs8",
+      ]
+    dir: "${_WK_DIR}"
