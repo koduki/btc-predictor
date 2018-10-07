@@ -1,0 +1,22 @@
+substitutions:
+  _WK_DIR: backend/scoresGET
+steps:
+  - id: "Fetch dependency"
+    name: "gcr.io/cloud-builders/npm"
+    args: ["install"]
+    dir: "${_WK_DIR}"
+  - id: "Deploy to Cloud Functions"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "beta",
+        "functions",
+        "deploy",
+        "scoresGET",
+        "--stage-bucket",
+        "btcp-cloud-functions-001",
+        "--trigger-http",
+        "--runtime",
+        "nodejs8",
+      ]
+    dir: "${_WK_DIR}"
