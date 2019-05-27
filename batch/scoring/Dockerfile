@@ -1,6 +1,11 @@
 FROM jupyter/scipy-notebook
 
-RUN pip install --upgrade pip && pip install google-cloud
+USER root
+RUN wget -O /usr/bin/hwrap https://storage.googleapis.com/shared-artifact/hwrap && chmod a+x /usr/bin/hwrap
 
+USER jovyan
+RUN pip install --upgrade pip && pip install google-cloud google-cloud-storage
 COPY scoring.py scoring.py
-CMD python scoring.py
+
+EXPOSE $PORT
+CMD /usr/bin/hwrap $PORT python scoring.py

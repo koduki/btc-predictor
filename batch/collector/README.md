@@ -22,12 +22,14 @@ docker build -t gcr.io/${PRJ_NAME}/predictor .
 gcloud docker -- push gcr.io/${PRJ_NAME}/predictor
 ```
 
-Add Job
+Run
 --------------
 
 ```bash
-kubectl delete cronjob btcollector
-kubectl run "btcollector" --schedule="50 23 * * * " --restart=OnFailure --image="gcr.io/${PRJ_NAME}/predictor"
+
+gcloud beta run deploy mbtc-collector --image gcr.io/koduki-docker-test-001-1083/mbtc/collector
+#kubectl run "btcollector" --schedule="50 23 * * * " --restart=OnFailure --image="gcr.io/${PRJ_NAME}/predictor"
+curl https://mbtc-collector-k66dhjq4na-uc.a.run.app
 ```
 
 Monitoring
