@@ -10,4 +10,4 @@ gsutil ls -l gs://cn_orz_pascal-bitcoin_prediction/ \n\
 ' > run.sh
 
 EXPOSE $PORT
-CMD /usr/bin/hwrap $PORT bash -x ./run.sh
+CMD /usr/bin/hwrap -p $PORT "bash -x ./run.sh"

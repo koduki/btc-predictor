@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && pip install google-cloud google-cloud-storage
 COPY predictor.py predictor.py
 
 EXPOSE $PORT
-CMD /usr/bin/hwrap $PORT python predictor.py
+CMD /usr/bin/hwrap -p $PORT "python predictor.py"

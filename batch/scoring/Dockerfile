@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && pip install google-cloud google-cloud-storage
 COPY scoring.py scoring.py
 
 EXPOSE $PORT
-CMD /usr/bin/hwrap $PORT python scoring.py
+CMD /usr/bin/hwrap -p $PORT "python scoring.py"
