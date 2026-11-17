@@ -18,5 +18,8 @@
     "@google-cloud/storage": "1.7.0",
     "nmp": "^1.0.3"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "overrides": {
+    "node-forge": "1.4.1"
+  }
 }
